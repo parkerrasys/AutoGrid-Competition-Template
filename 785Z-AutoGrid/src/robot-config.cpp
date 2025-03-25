@@ -12,8 +12,8 @@ controller Controller1 = controller(primary);
 motor leftDriveMotorA = motor(PORT5, ratio18_1, false);
 motor leftDriveMotorB = motor(PORT6, ratio18_1, false);
 motor_group leftDrive = motor_group(leftDriveMotorA, leftDriveMotorB);
-motor rightDriveMotorA = motor(PORT4, ratio18_1, false);
-motor rightDriveMotorB = motor(PORT7, ratio18_1, false);
+motor rightDriveMotorA = motor(PORT4, ratio18_1, true);
+motor rightDriveMotorB = motor(PORT7, ratio18_1, true);
 motor_group rightDrive = motor_group(rightDriveMotorA, rightDriveMotorB);
 inertial Inertial = inertial(PORT8);
 

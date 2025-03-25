@@ -1,3 +1,11 @@
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// leftDrive            motor_group   5, 6            
+// rightDrive           motor_group   4, 7            
+// Inertial             inertial      8               
+// ---- END VEXCODE CONFIGURED DEVICES ----
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
@@ -120,10 +128,6 @@ void pre_auton(void) {
 // Autonomous funtion
 void autonomous(void) {
     moveTo(2,1);
-    moveTo(3,1);
-    moveTo(4,2);
-    moveTo(3,1);
-    moveTo(2,1);
     moveTo(2,0);
     lookAt(2,1);
 }
@@ -131,18 +135,21 @@ void autonomous(void) {
 //For personal testing during teleop
 void noLimitAuton() {
     moveTo(2,1);
-    moveTo(3,1);
-    moveTo(4,2);
-    moveTo(3,1);
-    moveTo(2,1);
     moveTo(2,0);
     lookAt(2,1);
+    leftDrive.stop();
+    rightDrive.stop();
+}
+
+void calibrateInertial() {
+  Inertial.calibrate();
 }
 
 void usercontrol(void) {
   Controller1.Axis3.changed(leftDriveControl);
   Controller1.Axis2.changed(rightDriveControl);
-  Controller1.ButtonA.pressed(noLimitAuton);
+  Controller1.ButtonY.pressed(noLimitAuton);
+  Controller1.ButtonB.pressed(calibrateInertial);
   while (1) {
 
     wait(20, msec);
