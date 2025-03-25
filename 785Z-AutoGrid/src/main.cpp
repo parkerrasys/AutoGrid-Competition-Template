@@ -18,7 +18,6 @@
 
 // Version 0.2.0-alpha
 // Credits to Parker & Mia :)
-//test
 
 #include "vex.h"
 #include "autogrid.h"
