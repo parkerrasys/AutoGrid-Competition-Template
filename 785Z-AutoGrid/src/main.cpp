@@ -17,10 +17,9 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 // Version 0.2.0-alpha
-// Credits to Parker & Mia :)
+// Credits to Parker Rasys & Mia Keegan :)
 
 #include "vex.h"
-#include "autogrid.h"
 
 using namespace vex;
 
@@ -36,6 +35,68 @@ float robotRotation = 0;
 float robotSizeFB;
 float robotSizeLR;
 
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// AutoGrid Funtions - DO NOT REMOVE
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+void setSize(float FB, float LR) {
+  robotSizeFB = FB;
+  robotSizeLR = LR;
+}
+
+void setStarting(int startingX, int startingY) {
+  robotPosX = startingX;
+  robotPosY = startingY;
+}
+
+void rotateBot(double theta) {
+  double turningSpeed = Inertial.rotation(degrees) - theta;
+  while(fabs(turningSpeed) >= 1.5){
+    turningSpeed = (Inertial.rotation(degrees) - theta)/2;
+    leftDrive.spin(reverse, turningSpeed, percent);
+    rightDrive.spin(forward, turningSpeed, percent);
+  }
+  robotRotation += Inertial.rotation(degrees);
+}
+
+double toDegrees(double radians)
+{
+  return(radians*180/M_PI);
+}
+
+double findC(double a, double b)
+{
+  return(sqrt(pow(a,2)+pow(b,2)));
+}
+
+double findAngle(double a, double b)
+{
+  return(toDegrees(atan2(a,b)));
+}
+
+void moveTo(double valueX, double valueY) {
+	double a = (valueX - robotPosX);
+	double b = (valueY - robotPosY);
+	double c = findC(a,b);
+  double theta = findAngle(a,b);
+	rotateBot(theta);
+  leftDrive.setVelocity(50, percent);
+  rightDrive.setVelocity(50, percent);
+	leftDrive.spinFor(forward, c*oneTile, degrees, false);
+	rightDrive.spinFor(forward, c*oneTile, degrees);
+  robotPosX = valueX;
+  robotPosY = valueY;
+}
+
+void lookAt(double valueX, double valueY) {
+	double a = (valueX - robotPosX);
+	double b = (valueY - robotPosY);
+  double theta = findAngle(a,b);
+	rotateBot(theta);
+}
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+// End of AutoGrid Funtions
+// -=-=-=-=-=-=-=-=-=-=-=-=-
+
 void leftDriveControl() {
   leftDrive.setVelocity(Controller1.Axis3.position(percent), percent);
   leftDrive.spin(forward);
@@ -46,6 +107,7 @@ void rightDriveControl() {
   rightDrive.spin(forward);
 }
 
+// Pre_Auton Funtion
 void pre_auton(void) {
   vexcodeInit();
   leftDrive.setStopping(brake);
@@ -55,6 +117,7 @@ void pre_auton(void) {
   setSize(18, 18);
 }
 
+// Autonomous funtion
 void autonomous(void) {
     moveTo(2,1);
     moveTo(3,1);
