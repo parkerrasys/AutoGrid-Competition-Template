@@ -1,4 +1,5 @@
 # AutoGrid by team **785Z**
+[Documentation Link (Google Slides)](https://docs.google.com/presentation/d/1aiBOhSg7OVF-M1JR4eFLC4Ffyx-BolteY37Xqyi4cFI/edit?usp=sharing)
 ### (Please give team 785Z Credits when using our code)
 
 ### Latest Version
