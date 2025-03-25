@@ -20,6 +20,7 @@
 // Credits to Parker Rasys & Mia Keegan :)
 
 #include "vex.h"
+
 using namespace vex;
 
 // A global instance of competition
