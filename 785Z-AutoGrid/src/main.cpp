@@ -42,6 +42,8 @@ float robotPosY;
 float robotRotation = 0;
 float robotSizeFB;
 float robotSizeLR;
+double remainingDistance;
+double speedFactor;
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AutoGrid Funtions - DO NOT REMOVE
@@ -59,11 +61,13 @@ void setStarting(int startingX, int startingY) {
 void rotateBot(double theta) {
   double turningSpeed = Inertial.rotation(degrees) - theta;
   while(fabs(turningSpeed) >= 1.5){
-    turningSpeed = (Inertial.rotation(degrees) - theta)/2;
+    turningSpeed = (Inertial.rotation(degrees) - theta)/1.5;
     leftDrive.spin(reverse, turningSpeed, percent);
     rightDrive.spin(forward, turningSpeed, percent);
   }
   robotRotation += Inertial.rotation(degrees);
+  leftDrive.setPosition(0, degrees);
+  rightDrive.setPosition(0, degrees);
 }
 
 double toDegrees(double radians)
@@ -86,13 +90,16 @@ void moveTo(double valueX, double valueY) {
 	double b = (valueY - robotPosY);
 	double c = findC(a,b);
   double theta = findAngle(a,b);
+  double driveDistance = c*oneTile;
 	rotateBot(theta);
-  leftDrive.setVelocity(50, percent);
-  rightDrive.setVelocity(50, percent);
-	leftDrive.spinFor(forward, c*oneTile, degrees, false);
-	rightDrive.spinFor(forward, c*oneTile, degrees);
+  leftDrive.setVelocity(100, percent);
+  rightDrive.setVelocity(100, percent);
+	leftDrive.spinFor(forward, driveDistance, degrees, false);
+	rightDrive.spinFor(forward, driveDistance, degrees);
   robotPosX = valueX;
   robotPosY = valueY;
+  leftDrive.setPosition(0, degrees);
+  rightDrive.setPosition(0, degrees);
 }
 
 void lookAt(double valueX, double valueY) {
@@ -141,8 +148,23 @@ void noLimitAuton() {
     rightDrive.stop();
 }
 
+// Function for calibrating
 void calibrateInertial() {
   Inertial.calibrate();
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(1, 1);
+  Controller1.Screen.print("Calibrating...");
+  Controller1.Screen.setCursor(2, 1);
+  Controller1.Screen.print("Battery: %3.2f%", Brain.Battery.capacity());
+  while(Inertial.isCalibrating()) {
+    wait(20, msec);
+  }
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(1, 1);
+  Controller1.Screen.print("Ready!");
+  Controller1.Screen.setCursor(2, 1);
+  Controller1.Screen.print("Battery: %3.2f%", Brain.Battery.capacity());
+  Controller1.rumble(".");
 }
 
 void usercontrol(void) {
