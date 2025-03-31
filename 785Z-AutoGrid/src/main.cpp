@@ -24,7 +24,7 @@
 // Inertial             inertial      8               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
-// Version 0.2.0-alpha
+// Version 0.2.3-alpha
 // Credits to Parker Rasys & Mia Keegan :)
 
 #include "vex.h"
@@ -53,12 +53,13 @@ void setSize(float FB, float LR) {
   robotSizeLR = LR;
 }
 
-void setStarting(int startingX, int startingY) {
+void setStarting(float startingX, float startingY) {
   robotPosX = startingX;
   robotPosY = startingY;
 }
 
 void rotateBot(double theta) {
+  Inertial.setRotation(0, degrees);
   double turningSpeed = Inertial.rotation(degrees) - theta;
   while(fabs(turningSpeed) >= 1.5){
     turningSpeed = (Inertial.rotation(degrees) - theta)/1.5;
@@ -91,7 +92,7 @@ void moveTo(double valueX, double valueY) {
 	double c = findC(a,b);
   double theta = findAngle(a,b);
   double driveDistance = c*oneTile;
-	rotateBot(theta);
+	rotateBot(theta - robotRotation);
   leftDrive.setVelocity(100, percent);
   rightDrive.setVelocity(100, percent);
 	leftDrive.spinFor(forward, driveDistance, degrees, false);
@@ -101,6 +102,24 @@ void moveTo(double valueX, double valueY) {
   leftDrive.setPosition(0, degrees);
   rightDrive.setPosition(0, degrees);
 }
+
+void reverseTo(double valueX, double valueY) {
+	double a = (valueX - robotPosX);
+	double b = (valueY - robotPosY);
+	double c = findC(a,b);
+  double theta = findAngle(a,b);
+  double driveDistance = c*oneTile;
+	rotateBot(theta - robotRotation - 180);
+  leftDrive.setVelocity(100, percent);
+  rightDrive.setVelocity(100, percent);
+	leftDrive.spinFor(reverse, driveDistance, degrees, false);
+	rightDrive.spinFor(reverse, driveDistance, degrees);
+  robotPosX = valueX;
+  robotPosY = valueY;
+  leftDrive.setPosition(0, degrees);
+  rightDrive.setPosition(0, degrees);
+}
+
 
 void lookAt(double valueX, double valueY) {
 	double a = (valueX - robotPosX);
@@ -133,11 +152,11 @@ void pre_auton(void) {
 
 // Autonomous funtion
 void autonomous(void) {
-  setStarting(0,0);
-  moveTo(5, 5);
+  setStarting(2.5, 2.5);
+  moveTo(3, 3);
+  moveTo(2.5, 3.5);
+  moveTo(2, 3);
   moveTo(2.5, 2.5);
-  moveTo(0, 5);
-  moveTo(5, 0);
 }
 
 //For personal testing during teleop
