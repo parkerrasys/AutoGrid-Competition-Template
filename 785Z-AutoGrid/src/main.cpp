@@ -128,15 +128,16 @@ void pre_auton(void) {
   leftDrive.setStopping(brake);
   rightDrive.setStopping(brake);
   Inertial.calibrate();
-  setStarting(2,0);
   setSize(18, 18);
 }
 
 // Autonomous funtion
 void autonomous(void) {
-    moveTo(2,1);
-    moveTo(2,0);
-    lookAt(2,1);
+  setStarting(0,0);
+  moveTo(5, 5);
+  moveTo(2.5, 2.5);
+  moveTo(0, 5);
+  moveTo(5, 0);
 }
 
 //For personal testing during teleop
