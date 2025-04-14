@@ -8,6 +8,7 @@ double findAngle(double a, double b);
 void moveTo(double valueX, double valueY);
 void reverseTo(double valueX, double valueY);
 void lookAt(double valueX, double valueY);
+void setGearRatio(double inputGear, double outputGear);
 
 // External variable declarations
 extern double robotPosX;

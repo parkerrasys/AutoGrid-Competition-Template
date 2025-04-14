@@ -10,11 +10,14 @@
 
 #include "vex.h"
 #include "autogrid.h"
+#include "auto-selector.h"
 
 using namespace vex;
 
 // A global instance of competition
 competition Competition;
+
+int testrotate = 0;
 
 void leftDriveControl() {
   leftDrive.setVelocity(Controller1.Axis3.position(percent), percent);
@@ -29,19 +32,32 @@ void rightDriveControl() {
 // Pre_Auton Funtion
 void pre_auton(void) {
   vexcodeInit();
+  initAutoSelector();
   leftDrive.setStopping(brake);
   rightDrive.setStopping(brake);
   Inertial.calibrate();
-  setSize(18, 18);
+  setGearRatio(.5, 1);
 }
 
 // Autonomous funtion
 void autonomous(void) {
-  setStarting(2, 1);
-  moveTo(2, 2);
+  runSelectedAutonomous();
+}
+
+void test() {
+  runSelectedAutonomous();
+}
+
+void testLook() {
+  lookAt(1,0);
+  lookAt(0,-1);
+  lookAt(-1,0);
+  lookAt(0,0);
 }
 
 void usercontrol(void) {
+  Controller1.ButtonX.pressed(test);
+  Controller1.ButtonB.pressed(testLook);
   Controller1.Axis3.changed(leftDriveControl);
   Controller1.Axis2.changed(rightDriveControl);
   while (1) {
