@@ -37,6 +37,8 @@ double wheelDiameter = 4;
 double oneInch = (360)/(wheelDiameter*M_PI);
 double oneTile = 24*oneInch;
 
+int autonDriveSpeed = 50;
+
 float robotPosX;
 float robotPosY;
 float robotRotation = 0;
@@ -60,20 +62,41 @@ void setStarting(float startingX, float startingY) {
 
 void rotateBot(double theta) {
   Inertial.setRotation(0, degrees);
-  double turningSpeed = Inertial.rotation(degrees) - theta;
-  while(fabs(turningSpeed) >= 1.5){
-    turningSpeed = (Inertial.rotation(degrees) - theta)/1.5;
+  double angleDiff = theta;
+  double turningSpeed = Inertial.rotation(degrees) - angleDiff;
+  while (angleDiff > 180 || angleDiff <= -180) {
+    if (angleDiff > 180) {
+      angleDiff -= 360;
+    } else if (angleDiff <= -180) {
+      angleDiff += 360;
+    }
+  }
+
+  while (fabs(turningSpeed) >= 1.25) {
+    turningSpeed = (Inertial.rotation(degrees) - angleDiff) / 1.25;
     leftDrive.spin(reverse, turningSpeed, percent);
     rightDrive.spin(forward, turningSpeed, percent);
   }
+
+  leftDrive.stop();
+  rightDrive.stop();
   robotRotation += Inertial.rotation(degrees);
   leftDrive.setPosition(0, degrees);
   rightDrive.setPosition(0, degrees);
 }
 
-double toDegrees(double radians)
-{
-  return(radians*180/M_PI);
+double toDegrees(double radians) {
+  double degrees = radians * 180.0 / M_PI;
+
+  while (degrees > 180 || degrees < -180) {
+    if (degrees > 180) {
+      degrees -= 360;
+    } else if (degrees <= -180) {
+      degrees += 360;
+    }
+  }
+
+  return degrees;
 }
 
 double findC(double a, double b)
@@ -93,8 +116,8 @@ void moveTo(double valueX, double valueY) {
   double theta = findAngle(a,b);
   double driveDistance = c*oneTile;
 	rotateBot(theta - robotRotation);
-  leftDrive.setVelocity(100, percent);
-  rightDrive.setVelocity(100, percent);
+  leftDrive.setVelocity(autonDriveSpeed, percent);
+  rightDrive.setVelocity(autonDriveSpeed, percent);
 	leftDrive.spinFor(forward, driveDistance, degrees, false);
 	rightDrive.spinFor(forward, driveDistance, degrees);
   robotPosX = valueX;
@@ -110,8 +133,8 @@ void reverseTo(double valueX, double valueY) {
   double theta = findAngle(a,b);
   double driveDistance = c*oneTile;
 	rotateBot(theta - robotRotation - 180);
-  leftDrive.setVelocity(100, percent);
-  rightDrive.setVelocity(100, percent);
+  leftDrive.setVelocity(autonDriveSpeed, percent);
+  rightDrive.setVelocity(autonDriveSpeed, percent);
 	leftDrive.spinFor(reverse, driveDistance, degrees, false);
 	rightDrive.spinFor(reverse, driveDistance, degrees);
   robotPosX = valueX;
@@ -152,11 +175,8 @@ void pre_auton(void) {
 
 // Autonomous funtion
 void autonomous(void) {
-  setStarting(2.5, 2.5);
-  moveTo(3, 3);
-  moveTo(2.5, 3.5);
-  moveTo(2, 3);
-  moveTo(2.5, 2.5);
+  setStarting(2, 1);
+  moveTo(2, 2);
 }
 
 //For personal testing during teleop
