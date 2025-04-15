@@ -16,6 +16,8 @@ motor rightDriveMotorA = motor(PORT4, ratio18_1, true);
 motor rightDriveMotorB = motor(PORT7, ratio18_1, true);
 motor_group rightDrive = motor_group(rightDriveMotorA, rightDriveMotorB);
 inertial Inertial = inertial(PORT8);
+light LightA = light(Brain.ThreeWirePort.A);
+digital_out DigitalOutB = digital_out(Brain.ThreeWirePort.B);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

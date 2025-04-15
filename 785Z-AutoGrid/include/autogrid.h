@@ -10,6 +10,14 @@ void reverseTo(double valueX, double valueY);
 void lookAt(double valueX, double valueY);
 void setGearRatio(double inputGear, double outputGear);
 
+//Paths
+void red1();
+void red2(); 
+void red3();
+void blue1();
+void blue2();
+void blue3();
+
 // External variable declarations
 extern double robotPosX;
 extern double robotPosY;

@@ -1,9 +1,40 @@
 #include "vex.h"
 #include "autogrid.h"
 
-using namespace vex;
+// Your auton paths, these are not required. But you can use them for the auton selector.
+void red1() {
+  setStarting(2, 1);
+  reverseTo(2.5, 1.5);
+  reverseTo(2, 2);
+  reverseTo(1.5, 1.5);
+  reverseTo(2, 1);
+  lookAt(2, 2.25);
+}
 
-// Initialize global variables
+void red2() {
+  setStarting(0, 0);
+  lookAt(2, 0);
+}
+
+void red3() {
+  setStarting(0, 0);
+  lookAt(1, -1);
+}
+
+void blue1() {
+  setStarting(0, -1);
+  lookAt(2, 4);
+}
+
+void blue2() {
+  setStarting(-1, -1);
+  lookAt(4, 3);
+}
+
+void blue3() {
+  setStarting(-1, 0);
+  lookAt(6, 4);
+}
 
 // Size Variables
 double robotSizeFB = 0;

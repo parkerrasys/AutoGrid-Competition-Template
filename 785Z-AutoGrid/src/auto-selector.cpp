@@ -1,6 +1,7 @@
 #include "vex.h"
 #include "autogrid.h"
 #include "auto-selector.h"
+#include "paths.h"
 
 int currentAlliance = -1;
 int currentPosition = -1;
@@ -135,37 +136,26 @@ void runSelectedAutonomous() {
   if (currentAlliance == 0) {
     switch (currentPosition) {
       case 0:
-        setStarting(0, 0);
-        moveTo(0, 1);
+        red1();
         break;
-        
       case 1:
-        setStarting(0, 0);
-        lookAt(2, 0);
+        red2();
         break;
-        
       case 2:
-        setStarting(0, 0);
-        lookAt(1, -1);
+        red3();
         break;
     }
   } 
-
   else {
     switch (currentPosition) {
       case 0:
-        setStarting(0, -1);
-        lookAt(2, 4);
+        blue1();
         break;
-        
       case 1:
-        setStarting(-1, -1);
-        lookAt(4, 3);
+        blue2();
         break;
-        
       case 2:
-        setStarting(-1, 0);
-        lookAt(6, 4);
+        blue3();
         break;
     }
   }
