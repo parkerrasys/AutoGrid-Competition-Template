@@ -3,17 +3,14 @@
 
 // Your auton paths, these are not required. But you can use them for the auton selector.
 void red1() {
-  setStarting(2, 1);
-  reverseTo(2.5, 1.5);
-  reverseTo(2, 2);
-  reverseTo(1.5, 1.5);
-  reverseTo(2, 1);
-  lookAt(2, 2.25);
+  setStarting(0,0);
+  moveTo(0,1);
+  reverseTo(0,0);
 }
 
 void red2() {
   setStarting(0, 0);
-  lookAt(2, 0);
+  moveTo(0, 1);
 }
 
 void red3() {
@@ -58,8 +55,8 @@ int autonDriveSpeed = 50;
 
 // AutoGrid Functions
 void setGearRatio(double inputGear, double outputGear) {
-  gearRatio = inputGear / outputGear;
-  oneInch = (360 * gearRatio) / (wheelDiameter * M_PI);
+  gearRatio = (inputGear / outputGear);
+  oneInch = (360.0) / (wheelDiameter * M_PI * gearRatio);
   oneTile = 24 * oneInch;
 }
 

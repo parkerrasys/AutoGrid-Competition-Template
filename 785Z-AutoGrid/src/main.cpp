@@ -5,18 +5,8 @@
 // leftDrive            motor_group   5, 6            
 // rightDrive           motor_group   4, 7            
 // Inertial             inertial      8               
-// LightA               light         A               
-// DigitalOutB          digital_out   B               
 // ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// Controller1          controller                    
-// leftDrive            motor_group   5, 6            
-// rightDrive           motor_group   4, 7            
-// Inertial             inertial      8               
-// LightA               light         A               
-// ---- END VEXCODE CONFIGURED DEVICES ----
+
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Title:        AutoGrid Competition Template                             */
@@ -52,10 +42,10 @@ void rightDriveControl() {
 void pre_auton(void) {
   vexcodeInit();
   initAutoSelector();
-  leftDrive.setStopping(brake);
-  rightDrive.setStopping(brake);
+  leftDrive.setStopping(hold);
+  rightDrive.setStopping(hold);
   Inertial.calibrate();
-  setGearRatio(1, 1);
+  setGearRatio(36, 48);
 }
 
 // Autonomous funtion
