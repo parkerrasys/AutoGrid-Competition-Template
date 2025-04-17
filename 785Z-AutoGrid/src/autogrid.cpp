@@ -3,9 +3,14 @@
 
 // Your auton paths, these are not required. But you can use them for the auton selector.
 void red1() {
-  setStarting(0,0);
-  moveTo(0,1);
-  reverseTo(0,0);
+  setStarting(0, 0);
+  moveTo(5, 0);
+  lookAt(5,1);
+  // moveTo(2.5, 2.5);
+  // moveTo(5, 0);
+  // moveTo(0, 0);
+  // lookAt(0, 1);
+  // moveTo(0, 0);
 }
 
 void red2() {
@@ -29,8 +34,8 @@ void blue2() {
 }
 
 void blue3() {
-  setStarting(-1, 0);
-  lookAt(6, 4);
+  setStarting(0, 0);
+  moveTo(0,1);
 }
 
 // Size Variables
@@ -51,13 +56,16 @@ double speedFactor = 0;
 double wheelDiameter = 4;
 double oneInch = (360)/(wheelDiameter*M_PI);
 double oneTile = 24*oneInch;
+double reciprocalRatio;
+double correctGear;
 int autonDriveSpeed = 50;
 
 // AutoGrid Functions
 void setGearRatio(double inputGear, double outputGear) {
   gearRatio = (inputGear / outputGear);
-  oneInch = (360.0) / (wheelDiameter * M_PI * gearRatio);
-  oneTile = 24 * oneInch;
+  // reciprocalRatio = (outputGear/inputGear);
+  // correctGear = 1 - reciprocalRatio;
+
 }
 
 void setSize(double FB, double LR) {
@@ -71,7 +79,6 @@ void setStarting(double startingX, double startingY) {
 }
 
 void rotateBot(double theta) {
-  Inertial.setRotation(0, degrees);
   double angleDiff = theta;
   double turningSpeed = Inertial.rotation(degrees) - angleDiff;
   while (angleDiff > 180 || angleDiff <= -180) {
@@ -91,6 +98,7 @@ void rotateBot(double theta) {
   leftDrive.stop();
   rightDrive.stop();
   robotRotation += Inertial.rotation(degrees);
+  Inertial.setRotation(0, degrees);
   leftDrive.setPosition(0, degrees);
   rightDrive.setPosition(0, degrees);
 }
@@ -122,7 +130,8 @@ void moveTo(double valueX, double valueY) {
   double b = (valueY - robotPosY);
   double c = findC(a,b);
   double theta = findAngle(a,b);
-  double driveDistance = c*oneTile;
+  // double driveDistance = c * oneTile*gearRatio - (correctGear * c);
+  double driveDistance = c * oneTile / gearRatio;
   rotateBot(theta - robotRotation);
   leftDrive.setVelocity(autonDriveSpeed, percent);
   rightDrive.setVelocity(autonDriveSpeed, percent);
@@ -139,7 +148,8 @@ void reverseTo(double valueX, double valueY) {
   double b = (valueY - robotPosY);
   double c = findC(a,b);
   double theta = findAngle(a,b);
-  double driveDistance = c*oneTile;
+  // double driveDistance = c * oneTile*gearRatio - (correctGear * c);
+  double driveDistance = c * oneTile / gearRatio;
   rotateBot(theta - robotRotation - 180);
   leftDrive.setVelocity(autonDriveSpeed, percent);
   rightDrive.setVelocity(autonDriveSpeed, percent);

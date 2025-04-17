@@ -45,7 +45,7 @@ void pre_auton(void) {
   leftDrive.setStopping(hold);
   rightDrive.setStopping(hold);
   Inertial.calibrate();
-  setGearRatio(36, 48);
+  setGearRatio(48, 36);
 }
 
 // Autonomous funtion
