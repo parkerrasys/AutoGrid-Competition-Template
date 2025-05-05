@@ -1,84 +1,37 @@
-#include "vex.h"
 #include "autogrid.h"
+#include "vex.h"
 
-// Your auton paths, these are not required. But you can use them for the auton selector.
-void red1() {
-  setStarting(0, 0);
-  moveTo(5, 0);
-  lookAt(5,1);
-  // moveTo(2.5, 2.5);
-  // moveTo(5, 0);
-  // moveTo(0, 0);
-  // lookAt(0, 1);
-  // moveTo(0, 0);
+namespace autogrid {
+
+robot::robot(double wheelDiam, double gear)
+  : wheelDiameter(wheelDiam), gearRatio(gear), 
+    robotSizeFB(0), robotSizeLR(0), 
+    robotRotation(0), robotPosX(0), robotPosY(0),
+    autonDriveSpeed(50) {
+  oneInch = (360) / (wheelDiameter * M_PI);
+  oneTile = 24 * oneInch;
 }
 
-void red2() {
-  setStarting(0, 0);
-  moveTo(0, 1);
+robot::~robot() {
 }
 
-void red3() {
-  setStarting(0, 0);
-  lookAt(1, -1);
-}
-
-void blue1() {
-  setStarting(0, -1);
-  lookAt(2, 4);
-}
-
-void blue2() {
-  setStarting(-1, -1);
-  lookAt(4, 3);
-}
-
-void blue3() {
-  setStarting(0, 0);
-  moveTo(0,1);
-}
-
-// Size Variables
-double robotSizeFB = 0;
-double robotSizeLR = 0;
-
-// Robot Starting Configuration
-double robotRotation = 0;
-double robotPosX = 0;
-double robotPosY = 0;
-
-// Gear Ratio
-double gearRatio = 1.0;
-
-// Movment Factors
-double remainingDistance = 0;
-double speedFactor = 0;
-double wheelDiameter = 4;
-double oneInch = (360)/(wheelDiameter*M_PI);
-double oneTile = 24*oneInch;
-double reciprocalRatio;
-double correctGear;
-int autonDriveSpeed = 50;
-
-// AutoGrid Functions
-void setGearRatio(double inputGear, double outputGear) {
+void robot::setGearRatio(double inputGear, double outputGear) {
   gearRatio = (inputGear / outputGear);
   // reciprocalRatio = (outputGear/inputGear);
   // correctGear = 1 - reciprocalRatio;
-
 }
 
-void setSize(double FB, double LR) {
+void robot::setSize(double FB, double LR) {
   robotSizeFB = FB;
   robotSizeLR = LR;
 }
 
-void setStarting(double startingX, double startingY) {
+void robot::setStarting(double startingX, double startingY) {
   robotPosX = startingX;
   robotPosY = startingY;
 }
 
-void rotateBot(double theta) {
+void robot::rotateBot(double theta) {
   double angleDiff = theta;
   double turningSpeed = Inertial.rotation(degrees) - angleDiff;
   while (angleDiff > 180 || angleDiff <= -180) {
@@ -103,7 +56,7 @@ void rotateBot(double theta) {
   rightDrive.setPosition(0, degrees);
 }
 
-double toDegrees(double radians) {
+double robot::toDegrees(double radians) {
   double degrees = radians * 180.0 / M_PI;
 
   while (degrees > 180 || degrees < -180) {
@@ -117,19 +70,19 @@ double toDegrees(double radians) {
   return degrees;
 }
 
-double findC(double a, double b) {
-  return(sqrt(pow(a,2)+pow(b,2)));
+double robot::findC(double a, double b) {
+  return(sqrt(pow(a, 2) + pow(b, 2)));
 }
 
-double findAngle(double a, double b) {
-  return(toDegrees(atan2(a,b)));
+double robot::findAngle(double a, double b) {
+  return(toDegrees(atan2(a, b)));
 }
 
-void moveTo(double valueX, double valueY) {
+void robot::moveTo(double valueX, double valueY) {
   double a = (valueX - robotPosX);
   double b = (valueY - robotPosY);
-  double c = findC(a,b);
-  double theta = findAngle(a,b);
+  double c = findC(a, b);
+  double theta = findAngle(a, b);
   // double driveDistance = c * oneTile*gearRatio - (correctGear * c);
   double driveDistance = c * oneTile / gearRatio;
   rotateBot(theta - robotRotation);
@@ -143,11 +96,11 @@ void moveTo(double valueX, double valueY) {
   rightDrive.setPosition(0, degrees);
 }
 
-void reverseTo(double valueX, double valueY) {
+void robot::reverseTo(double valueX, double valueY) {
   double a = (valueX - robotPosX);
   double b = (valueY - robotPosY);
-  double c = findC(a,b);
-  double theta = findAngle(a,b);
+  double c = findC(a, b);
+  double theta = findAngle(a, b);
   // double driveDistance = c * oneTile*gearRatio - (correctGear * c);
   double driveDistance = c * oneTile / gearRatio;
   rotateBot(theta - robotRotation - 180);
@@ -161,9 +114,53 @@ void reverseTo(double valueX, double valueY) {
   rightDrive.setPosition(0, degrees);
 }
 
-void lookAt(double valueX, double valueY) {
+void robot::lookAt(double valueX, double valueY) {
   double a = (valueX - robotPosX);
   double b = (valueY - robotPosY);
-  double theta = findAngle(a,b);
+  double theta = findAngle(a, b);
   rotateBot(theta);
 }
+
+robot newRobot(double wheelDiameter, double gearRatio) {
+  return robot(wheelDiameter, gearRatio);
+}
+
+// Auton paths implementations
+void red1() {
+  robot bot = newRobot(4, 1.0);
+  bot.setStarting(0, 0);
+  bot.moveTo(5, 0);
+  bot.lookAt(5, 1);
+}
+
+void red2() {
+  robot bot = newRobot(4, 1.0);
+  bot.setStarting(0, 0);
+  bot.moveTo(0, 1);
+}
+
+void red3() {
+  robot bot = newRobot(4, 1.0);
+  bot.setStarting(0, 0);
+  bot.lookAt(1, -1);
+}
+
+void blue1() {
+  robot bot = newRobot(4, 1.0);
+  bot.setStarting(0, -1);
+  bot.lookAt(2, 4);
+}
+
+void blue2() {
+  robot bot = newRobot(4, 1.0);
+  bot.setStarting(-1, -1);
+  bot.lookAt(4, 3);
+}
+
+void blue3() {
+  robot bot = newRobot(4, 1.0);
+  bot.setStarting(0, 0);
+  bot.moveTo(0, 1);
+}
+
+} // namespace autogrid

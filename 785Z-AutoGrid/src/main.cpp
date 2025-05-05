@@ -21,10 +21,13 @@
 #include "autogrid.h"
 #include "auto-selector.h"
 
+using namespace autogrid;
 using namespace vex;
 
 // A global instance of competition
 competition Competition;
+
+robot myRobot = newRobot(4, 1);
 
 int testrotate = 0;
 
@@ -45,7 +48,7 @@ void pre_auton(void) {
   leftDrive.setStopping(hold);
   rightDrive.setStopping(hold);
   Inertial.calibrate();
-  setGearRatio(48, 36);
+  myRobot.setGearRatio(48, 36);
 }
 
 // Autonomous funtion
@@ -58,10 +61,10 @@ void test() {
 }
 
 void testLook() {
-  lookAt(1,0);
-  lookAt(0,-1);
-  lookAt(-1,0);
-  lookAt(0,0);
+  myRobot.lookAt(1,0);
+  myRobot.lookAt(0,-1);
+  myRobot.lookAt(-1,0);
+  myRobot.lookAt(0,0);
 }
 
 void usercontrol(void) {
