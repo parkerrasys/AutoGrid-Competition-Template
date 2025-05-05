@@ -38,12 +38,5 @@ public:
 
 robot newRobot(double wheelDiameter, double gearRatio);
 
-void red1();
-void red2();
-void red3();
-void blue1();
-void blue2();
-void blue3();
-
 } // namespace autogrid
 #endif // AUTOGRID_H

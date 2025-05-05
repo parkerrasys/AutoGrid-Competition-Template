@@ -125,42 +125,4 @@ robot newRobot(double wheelDiameter, double gearRatio) {
   return robot(wheelDiameter, gearRatio);
 }
 
-// Auton paths implementations
-void red1() {
-  robot bot = newRobot(4, 1.0);
-  bot.setStarting(0, 0);
-  bot.moveTo(5, 0);
-  bot.lookAt(5, 1);
-}
-
-void red2() {
-  robot bot = newRobot(4, 1.0);
-  bot.setStarting(0, 0);
-  bot.moveTo(0, 1);
-}
-
-void red3() {
-  robot bot = newRobot(4, 1.0);
-  bot.setStarting(0, 0);
-  bot.lookAt(1, -1);
-}
-
-void blue1() {
-  robot bot = newRobot(4, 1.0);
-  bot.setStarting(0, -1);
-  bot.lookAt(2, 4);
-}
-
-void blue2() {
-  robot bot = newRobot(4, 1.0);
-  bot.setStarting(-1, -1);
-  bot.lookAt(4, 3);
-}
-
-void blue3() {
-  robot bot = newRobot(4, 1.0);
-  bot.setStarting(0, 0);
-  bot.moveTo(0, 1);
-}
-
 } // namespace autogrid
